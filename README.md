@@ -6,6 +6,7 @@
 
 
 
+
 create database store;
 
 create table countries
@@ -71,6 +72,7 @@ insert into order_products values (22,505,100);
 select * from countries;
 select * from users;
 select * from products;
+select * from orders;
 
 UPDATE countries
 SET
@@ -79,4 +81,15 @@ WHERE code=300;
 DELETE FROM
            products
 WHERE id=505;
+alter table users add column created_at timestamp default now();
+alter table orders add column created_at timestamp default now();
+alter table products add column created_at timestamp default now();
 
+update users set created_at=now()
+where id=1;
+
+update orders set created_at=now()
+where id=22;
+
+update products set created_at=now()
+where id=505
