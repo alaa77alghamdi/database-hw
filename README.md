@@ -5,6 +5,7 @@
 
 
 
+
 create database store;
 
 create table countries
@@ -20,65 +21,56 @@ create table users
     id            int(10) primary key,
     full_name     varchar(20),
     email         varchar(20) unique,
-    gender        char(1),
+    gender        char(1) check ( gender = 'M' or gender = 'F' ),
     date_of_birth varchar(15),
     created_at    datetime,
-    country_code  int,
-    foreign key (country_code) references countries (code),
-    Gender        varchar(1) check ( Gender = 'M' or Gender = 'F' )
+    country_code  int(10),
+    foreign key (country_code) references countries (code)
+
 
 );
 create table orders
 (
     id         int(10) primary key,
-    user_id    int,
-    status     varchar(6),
+    user_id    int (10),
+    status     varchar(6) check ( status = 'start' or status = 'finish' ),
     created_at datetime,
-    Status     varchar(6) check ( Status = 'start' or Status = 'finish' ),
+
     foreign key (user_id) references users (id)
 );
 
 create table order_products
 (
-    order_id   int(10) primary key,
-    product_id int(10) primary key,
+    order_id   int(10) ,
+    product_id int(10) ,
     quantity   int default 0,
-    foreign key (order_id) references orders (id),
-    foreign key (product_id) references products (id)
+    foreign key (order_id) references orders(id),
+     foreign key (product_id) references products(id)
 );
 
 create table products
 (
-    id         int(10),
+    id         int(10) primary key ,
     name       varchar(10) not null,
     price      int default 0,
-    status     varchar(10),
-    created_at datetime,
-    Status     varchar(10) check ( Status = 'valid' or Status = 'expired' )
+    status     varchar(10) check ( status = 'valid' or status = 'expired' ),
+    created_at datetime
+
 );
 
-ALTER TABLE orders
-    ADD COLUMN created_at TIMESTAMP;
-ALTER TABLE orders
-    ALTER COLUMN created_at SET DEFAULT now();
-ALTER TABLE users
-    ADD COLUMN created_at TIMESTAMP;
-ALTER TABLE users
-    ALTER COLUMN created_at SET DEFAULT now();
+
+
 
 #DML
-insert into countries
-values (300, 'Jeddah', 'Asia');
-insert into users
-values (1, 'alaa abdullah alghamdi', 'alaa@gmail.com', 'f', '19-1-1999', '3-2-2023', 66);
-insert into orders
-values (22, 1234, 'start', '2-9-2022');
-insert into products
-values (505, 'book', 332, 'valid', '5-5-2023');
-insert into order_products
-values (565, 787, 45);
-select * from countries;
+insert into countries values (300, 'Jeddah', 'Asia');
+insert into users values (1, 'alaa alghamdi', 'alaa@gmail.com', 'f', '19-1-1999', '2022/7/2', 300);
+insert into orders values (22, 1, 'start', '2022/9/2');
+insert into products values (505, 'book', 332, 'valid', '2023/5/6');
+insert into order_products values (22,505,100);
 
+select * from countries;
+select * from users;
+select * from products;
 
 UPDATE countries
 SET
@@ -87,3 +79,4 @@ WHERE code=300;
 DELETE FROM
            products
 WHERE id=505;
+
